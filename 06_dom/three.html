@@ -1,4 +1,31 @@
 <!DOCTYPE html>
+<!--
+  CONCEPT: DOM Creation — Creating and Inserting Elements
+  ============================================================
+  You can build new HTML elements entirely from JavaScript
+  and inject them into the page — no hard-coded HTML required.
+
+  CREATING:
+    document.createElement('tag')     → creates an element (not yet in DOM)
+    document.createTextNode('text')   → creates a pure text node
+
+  CONFIGURING before insertion:
+    element.className = 'cls'         → set class
+    element.id = 'someId'            → set id
+    element.setAttribute('attr', val) → set any attribute
+    element.style.property = 'value'  → set inline style
+    element.innerText = 'text'        → set text content (also adds to DOM)
+    element.appendChild(textNode)     → attach a text node (safer than innerHTML)
+
+  INSERTING INTO THE DOM:
+    parent.appendChild(child)         → adds child as the LAST child of parent
+    parent.insertBefore(new, ref)     → inserts before a reference element
+
+  NOTE — innerHTML vs createTextNode:
+    element.innerHTML = "<b>hi</b>"   → parses HTML (XSS risk with user input)
+    element.appendChild(createTextNode('hi')) → plain text, safe from XSS
+  ============================================================
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,20 +34,26 @@
     <title>Chai aur code </title>
 </head>
 <body style="background-color: #212121; color: #fff;">
-    
+    <!-- body is empty — the div below is created entirely by JS -->
 </body>
 <script>
+    // Step 1: Create a new div element (not in DOM yet)
     const div = document.createElement('div')
-    console.log(div);
+    console.log(div);                                          // <div></div>
+
+    // Step 2: Configure it
     div.className = "main"
-    div.id = Math.round(Math.random() * 10 + 1)
-    div.setAttribute("title", "generated title")
+    div.id = Math.round(Math.random() * 10 + 1)              // random id
+    div.setAttribute("title", "generated title")              // custom attribute
     div.style.backgroundColor = "green"
     div.style.padding = "12px"
-    // div.innerText = "Chai aur code"
-    const addText = document.createTextNode("Chai aur code")
-    div.appendChild(addText)
 
-    document.body.appendChild(div)
+    // Step 3: Add text content
+    // div.innerText = "Chai aur code"                        // simple but mixes content and structure
+    const addText = document.createTextNode("Chai aur code") // safer — pure text node
+    div.appendChild(addText)                                  // attach text to div
+
+    // Step 4: Insert into the page
+    document.body.appendChild(div)   // div is now visible in the DOM
 </script>
 </html>

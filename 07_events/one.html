@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--
+  CONCEPT: Event Delegation & Event Object
+  ============================================================
+  Instead of attaching a listener to EVERY image, we attach ONE
+  listener to the parent <ul> and use e.target to figure out
+  which child was actually clicked. This is EVENT DELEGATION.
+
+  WHY EVENT DELEGATION?
+    - Efficient — one listener vs many
+    - Works for dynamically added elements (new children are covered automatically)
+
+  EVENT OBJECT properties:
+    e.type            → "click", "keydown", etc.
+    e.target          → the element that was ACTUALLY clicked (deepest)
+    e.currentTarget   → the element the listener is ATTACHED to (the ul here)
+    e.target.tagName  → tag name in UPPERCASE: "IMG", "LI", "A"
+    e.target.id       → the id attribute of the clicked element
+    e.clientX/Y       → mouse position relative to viewport
+    e.timeStamp       → ms since page load when event fired
+
+  EVENT PROPAGATION — Bubbling vs Capturing:
+    Bubbling (default, false): event travels UP from child → parent
+    Capturing (true):          event travels DOWN from parent → child
+    addEventListener(type, fn, useCapture)  ← third arg controls this
+
+  e.stopPropagation() → stops the event travelling further up/down the tree
+  e.preventDefault()  → cancels default browser action (e.g. link navigation)
+
+  REMOVING elements:
+    e.target.parentNode → the <li> wrapping the <img>
+    li.remove()         → removes the entire <li> from the DOM
+  ============================================================
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Events</title>
+</head>
+<body style="background-color: #414141; color: aliceblue;">
+    <h2>Amazing image</h2>
+    <div>
+        <ul id="images">
+            <li><img width="200px" id="photoshop" src="https://images.pexels.com/photos/3561339/pexels-photo-3561339.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="photoshop"></li>
+            <li><img width="200px" id="japan"     src="https://images.pexels.com/photos/3532553/pexels-photo-3532553.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="japan"></li>
+            <li><img width="200px" id="river"     src="https://images.pexels.com/photos/3532551/pexels-photo-3532551.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="river"></li>
+            <li><img width="200px" id="owl"       src="https://images.pexels.com/photos/3532552/pexels-photo-3532552.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="owl"></li>
+            <li><img width="200px" id="prayer"    src="https://images.pexels.com/photos/2522671/pexels-photo-2522671.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="prayer"></li>
+            <li><a style="color: aliceblue;" href="https://google.com" id="google">Google</a></li>
+        </ul>
+   </div>
+</body>
+<script>
+    // Old-style inline handler (avoid — hard to remove, mixes HTML and JS):
+    // document.getElementById('owl').onclick = function(){ alert("owl clicked") }
+
+    // attachEvent() — old IE way (avoid)
+    // jQuery - .on() — jQuery wrapper
+
+    // Useful event object properties for reference:
+    // type, timestamp, defaultPrevented
+    // target, toElement, srcElement, currentTarget
+    // clientX, clientY, screenX, screenY
+    // altkey, ctrlkey, shiftkey, keyCode
+
+    // Capturing phase (3rd arg = true) — fires on the way DOWN the DOM tree:
+    // document.getElementById('images').addEventListener('click', function(e){
+    //     console.log("clicked inside the ul");
+    // }, true)
+
+    // Capturing phase on the child:
+    // document.getElementById('owl').addEventListener('click', function(e){
+    //     console.log("owl clicked");
+    //     e.stopPropagation()  // stop the event from travelling further
+    // }, true)
+
+    // Prevent default browser action (e.g. stop a link from navigating):
+    // document.getElementById('google').addEventListener('click', function(e){
+    //     e.preventDefault();   // don't follow the href
+    //     e.stopPropagation()   // don't bubble up to the ul listener
+    //     console.log("google clicked");
+    // }, false)
+
+
+    // EVENT DELEGATION — one listener on the parent handles all children
+    document.querySelector('#images').addEventListener('click', function(e){
+        console.log(e.target.tagName);  // "IMG", "A", "LI", "UL" — whatever was clicked
+
+        // Only act when an <img> was the actual click target
+        if (e.target.tagName === 'IMG') {
+            console.log(e.target.id);             // id of the clicked image
+            let removeIt = e.target.parentNode    // the <li> wrapping this <img>
+            removeIt.remove()                     // remove the entire <li> from DOM
+        }
+    })
+
+    // Alternative removal syntax (older):
+    // removeIt.parentNode.removeChild(removeIt)
+</script>
+</html>

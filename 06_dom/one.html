@@ -1,8 +1,34 @@
 <!DOCTYPE html>
+<!--
+  CONCEPT: DOM — Selecting Elements
+  ============================================================
+  The DOM (Document Object Model) is a tree representation of
+  the HTML page that JavaScript can read and manipulate.
+
+  SELECTION METHODS:
+    document.getElementById('id')          → single element by id
+    document.getElementsByClassName('cls') → HTMLCollection by class
+    document.getElementsByTagName('tag')   → HTMLCollection by tag
+    document.querySelector('css')          → FIRST match of any CSS selector
+    document.querySelectorAll('css')       → NodeList of ALL matches
+
+  querySelector/querySelectorAll are the modern standard —
+  they accept any CSS selector (#id, .class, tag, [attr], etc.)
+
+  READING CONTENT:
+    element.innerHTML   → HTML string inside the element
+    element.innerText   → visible text only
+    element.textContent → all text including hidden
+
+  READING ATTRIBUTES & STYLES:
+    element.getAttribute('attr')
+    element.style.property
+  ============================================================
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    
+
     <title>DOM learning</title>
     <style>
         .bg-black{

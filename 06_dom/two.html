@@ -1,4 +1,30 @@
 <!DOCTYPE html>
+<!--
+  CONCEPT: DOM Traversal — Navigating Parent / Child / Sibling nodes
+  ============================================================
+  Once you have a reference to one element, you can navigate
+  the DOM tree relative to it without using another querySelector.
+
+  CHILD NAVIGATION:
+    element.children            → HTMLCollection of direct child ELEMENTS
+    element.childNodes          → NodeList of ALL child nodes
+                                  (includes text nodes, comments, elements)
+    element.firstElementChild   → first child element
+    element.lastElementChild    → last child element
+
+  PARENT NAVIGATION:
+    element.parentElement       → direct parent element
+    element.parentNode          → direct parent node (usually same as above)
+
+  SIBLING NAVIGATION:
+    element.nextElementSibling     → next sibling element
+    element.previousElementSibling → previous sibling element
+
+  KEY DIFFERENCE — children vs childNodes:
+    children    → only element nodes (what you usually want)
+    childNodes  → everything: text nodes (whitespace!), comments, elements
+  ============================================================
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,22 +44,27 @@
 <script>
     const parent = document.querySelector('.parent')
     // console.log(parent);
-    // console.log(parent.children);
-    // console.log(parent.children[1].innerHTML);
+    // console.log(parent.children);              // HTMLCollection of 4 .day divs
+    // console.log(parent.children[1].innerHTML); // "Tuesday"
 
+    // Looping over children
     // for (let i = 0; i < parent.children.length; i++) {
     //      console.log(parent.children[i].innerHTML);
-        
     // }
-    parent.children[1].style.color = "orange"
-    // console.log(parent.firstElementChild);
-    // console.log(parent.lastElementChild);
 
+    // Directly styling a child by index
+    parent.children[1].style.color = "orange"   // Tuesday turns orange
+
+    // console.log(parent.firstElementChild);    // Monday div
+    // console.log(parent.lastElementChild);     // Thursday div
+
+    // Sibling navigation starting from first .day
     const dayOne = document.querySelector('.day')
-    // console.log(dayOne);
-    // console.log(dayOne.parentElement);
-    // console.log(dayOne.nextElementSibling);
+    // console.log(dayOne);                      // Monday div
+    // console.log(dayOne.parentElement);        // .parent div
+    // console.log(dayOne.nextElementSibling);   // Tuesday div
 
+    // childNodes includes the comment node and whitespace text nodes too
     console.log("NODES: ", parent.childNodes);
 </script>
 </html>

@@ -1,4 +1,25 @@
 <!DOCTYPE html>
+<!--
+  CONCEPT: DOM Manipulation — Edit and Remove Elements
+  ============================================================
+  After selecting an element you can edit or remove it.
+
+  EDITING:
+    element.innerHTML = '<li>New</li>'    → replaces inner HTML (parses tags)
+    element.textContent = 'text'         → replaces with plain text (safer)
+    element.replaceWith(newElement)      → replaces element with another node
+    element.outerHTML = '<li>New</li>'   → replaces the element itself
+                                           (element reference becomes stale!)
+
+  REMOVING:
+    element.remove()                     → removes element from the DOM
+
+  CSS SELECTORS in querySelector:
+    'li:nth-child(2)'   → second li
+    'li:first-child'    → first li
+    'li:last-child'     → last li
+  ============================================================
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,6 +33,9 @@
     </ul>
 </body>
 <script>
+    // --- ADDING elements ---
+
+    // innerHTML approach — parses the string as HTML (simple but XSS risk)
     function addLanguage(langName){
         const li = document.createElement('li');
         li.innerHTML = `${langName}`
@@ -20,6 +44,7 @@
     addLanguage("python")
     addLanguage("typescript")
 
+    // Optimised approach — createTextNode is safer (no HTML parsing)
     function addOptiLanguage(langName){
         const li = document.createElement('li');
         li.appendChild(document.createTextNode(langName))
@@ -27,22 +52,27 @@
     }
     addOptiLanguage('golang')
 
-    //Edit
-    const secondLang = document.querySelector("li:nth-child(2)")
+    // List is now: Javascript, python, typescript, golang
+
+    // --- EDITING elements ---
+
+    // replaceWith(newNode) — swaps the selected element with a new one
+    const secondLang = document.querySelector("li:nth-child(2)")  // "python"
     console.log(secondLang);
-    //secondLang.innerHTML = "Mojo"
+    //secondLang.innerHTML = "Mojo"   // simple innerHTML edit
     const newli = document.createElement('li')
     newli.textContent = "Mojo"
-    secondLang.replaceWith(newli)
+    secondLang.replaceWith(newli)    // "python" → "Mojo"
 
-    //edit
-    const firstLang = document.querySelector("li:first-child")
-    firstLang.outerHTML = '<li>TypeScript</li>'
+    // outerHTML — replaces the element AND its tag with a raw HTML string
+    // WARNING: the original variable (firstLang) now points to a detached node
+    const firstLang = document.querySelector("li:first-child")  // "Javascript"
+    firstLang.outerHTML = '<li>TypeScript</li>'  // "Javascript" → "TypeScript"
 
-    //remove
-    const lastLang = document.querySelector('li:last-child')
-    lastLang.remove()
+    // --- REMOVING elements ---
 
-
+    // remove() — removes the element from the DOM entirely
+    const lastLang = document.querySelector('li:last-child')  // "golang"
+    lastLang.remove()    // "golang" is gone
 </script>
 </html>

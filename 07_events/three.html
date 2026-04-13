@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--
+  CONCEPT: setInterval & clearInterval
+  ============================================================
+  setInterval schedules a function to run REPEATEDLY at a fixed interval.
+
+  SYNTAX:
+    const intervalId = setInterval(fn, delayMs, ...args)
+    clearInterval(intervalId)   ← stops the repeating calls
+
+  HOW IT DIFFERS FROM setTimeout:
+    setTimeout  → runs ONCE after a delay
+    setInterval → runs REPEATEDLY every delayMs milliseconds
+
+  GUARD PATTERN (if !intervalId):
+    Prevents stacking multiple intervals if Start is clicked
+    more than once. Only creates a new interval if none is running.
+
+  CLEANUP PATTERN:
+    Always set intervalId = null after clearInterval so the
+    guard condition works correctly for the next Start click.
+
+  USE CASE HERE:
+    Start button begins logging timestamps every second.
+    Stop button cancels the interval so it stops logging.
+  ============================================================
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>setInterval & clearInterval</title>
+</head>
+<body>
+    <h1>Chai aur Javascript</h1>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+</body>
+<script>
+    // Callback that logs a label and the current timestamp
+    const sayDate = function(str){
+        console.log(str, Date.now());  // e.g. "hi 1696843942123"
+    }
+
+    let intervalId;  // holds the interval ID so it can be stopped
+
+    // Start button — begins the repeating interval
+    document.querySelector('#start').addEventListener('click', function(){
+        if (!intervalId) {  // guard: don't stack intervals on repeated clicks
+            intervalId = setInterval(sayDate, 1000, "hi")
+            // setInterval(fn, delay, ...args) — "hi" is passed as str to sayDate
+        }
+    })
+
+    // Stop button — cancels the interval
+    document.querySelector('#stop').addEventListener('click', function(){
+        if(!intervalId) {
+            return;  // nothing to stop
+        }
+        clearInterval(intervalId)  // stop the repeating calls
+        intervalId = null;         // reset so Start works again
+    })
+</script>
+</html>
